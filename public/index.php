@@ -42,8 +42,20 @@ function votar($conn) {
         exit;
     }
 
+    if (pg_affected_rows($result) === 0) {
+        $insertQuery = "INSERT INTO votos_personajes (nombre, num_votos) VALUES ($1, 1)";
+        $insertResult = pg_query_params($conn, $insertQuery, [$name]);
+
+        if (!$insertResult) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error al insertar nuevo personaje"]);
+            exit;
+        }
+    }
+
     echo json_encode(["success" => true, "message" => "Voto registrado para $name"]);
 }
+
 
 function obtenerTop3($conn) {
     $query = "SELECT nombre, num_votos FROM votos_personajes ORDER BY num_votos DESC NULLS LAST LIMIT 3";
