@@ -10,6 +10,10 @@ header("Access-Control-Allow-Headers: Content-Type");
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 
 $conn = connectToDB();
 
@@ -22,6 +26,7 @@ if ($method === 'POST' && $uri === '/votar') {
     echo json_encode(["error" => "Endpoint no encontrado"]);
     exit;
 }
+
 
 function votar($conn) {
     $input = json_decode(file_get_contents("php://input"), true);
