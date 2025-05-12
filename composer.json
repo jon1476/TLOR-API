@@ -1,0 +1,5 @@
+{
+  "name": "tlor/api",
+  "description": "API REST para votar personajes",
+  "require": {}
+}
