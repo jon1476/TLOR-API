@@ -12,9 +12,9 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 $conn = connectToDB();
 
-if ($method === 'POST' && strcmp($uri, '/votar')) {
+if ($method === 'POST' && $uri === '/votar') {
     votar($conn);
-} elseif ($method === 'GET' && strcmp($uri, '/top3')) {
+} elseif ($method === 'GET' && $uri === '/top3') {
     obtenerTop3($conn);
 } else {
     http_response_code(404);
