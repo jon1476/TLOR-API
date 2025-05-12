@@ -9,7 +9,6 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-var_dump($uri);
 
 
 $conn = connectToDB();
