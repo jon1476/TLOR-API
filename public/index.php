@@ -33,7 +33,7 @@ function votar($conn) {
         exit;
     }
 
-    $query = "UPDATE personajes SET votos = COALESCE(votos, 0) + 1 WHERE name = $1";
+    $query = "UPDATE votos_personajes SET num_votos = COALESCE(num_votos, 0) + 1 WHERE nombre = $1";
     $result = pg_query_params($conn, $query, [$name]);
 
     if (!$result) {
@@ -46,7 +46,7 @@ function votar($conn) {
 }
 
 function obtenerTop3($conn) {
-    $query = "SELECT name, votos FROM personajes ORDER BY votos DESC NULLS LAST LIMIT 3";
+    $query = "SELECT nombre, num_votos FROM votos_personajes ORDER BY num_votos DESC NULLS LAST LIMIT 3";
     $result = pg_query($conn, $query);
 
     if (!$result) {
