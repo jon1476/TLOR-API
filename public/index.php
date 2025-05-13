@@ -17,14 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $conn = connectToDB();
 
-if ($method === 'POST' && $uri === '/votarPersonaje') {
+if ($method === 'POST' && ($uri === '/votarPersonaje' ||  $uri === '/votarLibro' || $uri === '/votarPelicula')) {
     votar($conn, $uri);
-} elseif ($method === 'POST' && $uri === '/votarLibro') {
-    votar($conn, $uri);
-} elseif ($method === 'POST' && $uri === '/votarPelicula') {
-    votar($conn, $uri);
-} elseif ($method === 'GET' && $uri === '/top3') {
-    obtenerTop3($conn);
+} elseif ($method === 'GET' && ($uri === '/top3Personajes' ||  $uri === '/top3Libros' || $uri === '/top3Peliculas')) {
+    obtenerTop3($conn, $uri);
 } else {
     http_response_code(404);
     echo json_encode(["error" => "Endpoint no encontrado"]);
@@ -108,11 +104,18 @@ function votar($conn, $uri)
 }
 
 
-function obtenerTop3($conn)
+function obtenerTop3($conn, $uri)
 {
-    $query = "SELECT nombre, num_votos FROM votos_personajes ORDER BY num_votos DESC NULLS LAST LIMIT 3";
-    $result = pg_query($conn, $query);
-
+    if ($uri === '/top3Personajes') {
+        $query = "SELECT nombre, num_votos FROM votos_personajes ORDER BY num_votos DESC NULLS LAST LIMIT 3";
+        $result = pg_query($conn, $query);
+    } elseif ($uri === '/top3Libros') {
+        $query = "SELECT nombre, num_votos FROM votos_libros ORDER BY num_votos DESC NULLS LAST LIMIT 3";
+        $result = pg_query($conn, $query);
+    } elseif ($uri === '/top3Peliculas') {
+        $query = "SELECT nombre, num_votos FROM votos_peliculas ORDER BY num_votos DESC NULLS LAST LIMIT 3";
+        $result = pg_query($conn, $query);
+    }
     if (!$result) {
         http_response_code(500);
         echo json_encode(["error" => "Error al obtener top 3"]);
